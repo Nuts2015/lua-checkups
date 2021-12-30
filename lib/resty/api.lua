@@ -1,14 +1,20 @@
--- local _M = {}
--- function _M.greet(name)
---     ngx.say("Greetings from ", name)
--- end
+local config = require "config.config"
 
--- function _M.get_proxy()
---     ngx.say("url:","api.eosargentina.io")
--- end
--- return _M
+local _M = {}
+function _M.get_proxy()
+    local server = _M.get_rand_server()
+    local url = server["host"]
 
+    return "http://api.eosargentina.io"
+end
 
-local uri = "http://api.eosargentina.io";
+function _M.get_rand_server()
+    local count = 0
+    local server_list = config.servers
+    for k, v in pairs(server_list) do count = count + 1 end
+    local num = math.random(0, (count - 1))
+    return server_list[num]
+end
 
-return uri;
+return _M
+
